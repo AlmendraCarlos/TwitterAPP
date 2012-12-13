@@ -1,0 +1,4 @@
+name = custom_twitt
+description = Module for twitt APP
+package = Twitter Section
+core = 7.x

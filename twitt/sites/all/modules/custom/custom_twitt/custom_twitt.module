@@ -1,0 +1,42 @@
+<?php
+
+
+
+function custom_twitt_menu() {
+    $items = array();
+    $items['ajax/def'] = array(
+        'page callback' => 'module_twitt',
+        'access callback' => TRUE,/*permiso para q el modulo acceda a datos*/
+        'type' => MENU_CALLBACK
+    );
+    return $items;
+}
+
+function module_twitt() {
+    global $user; /* variable global */
+    $user_profile = user_load($user->uid); /* funcion para info del uss */
+     $timeline_response = array();
+  if (count($user_profile->twitter_accounts) !== 0) {
+
+    $user_timeline = user_timeline($user_profile->twitter_accounts[0]->id);
+    foreach ($user_timeline as $timeline_item) {
+      $timeline_response[] = array(
+          'text' => $timeline_item->text,
+          'created_at' => $timeline_item->created_at,
+          'favorited' => $timeline_item->favorited,
+      );
+    }
+
+        drupal_json_output($timeline_response);
+    
+  }
+}
+function user_timeline($twitter_uid) {
+  //conect  
+  $account = twitter_account_load($twitter_uid);
+  $twitter = twitter_connect($account);
+  
+  //consulta
+  $params = array('count' => '10');
+  return $twitter->user_timeline($account->id, $params);
+}
