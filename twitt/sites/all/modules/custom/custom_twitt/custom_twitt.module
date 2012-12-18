@@ -1,7 +1,4 @@
 <?php
-
-
-
 function custom_twitt_menu() {
     $items = array();
     $items['ajax/def'] = array(
@@ -36,7 +33,10 @@ function user_timeline($twitter_uid) {
   $account = twitter_account_load($twitter_uid);
   $twitter = twitter_connect($account);
   
-  //consulta
+  //consulta trae mis twits
   $params = array('count' => '10');
   return $twitter->user_timeline($account->id, $params);
+  
+  //trae mis twits y los de mis seg
+  //  return $twitter->home_timeline($params);
 }
